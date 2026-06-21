@@ -78,6 +78,57 @@ if st.button("🔍 Predict"):
     std_data = scaler.transform(input_data)
 
     prediction = model.predict(std_data)
+    risk_score = confidence
+
+if risk_score < 40:
+    st.success("🟢 Low Risk")
+elif risk_score < 70:
+    st.warning("🟡 Medium Risk")
+else:
+    st.error("🔴 High Risk")
+    st.subheader("Risk Meter")
+st.progress(int(risk_score))
+st.subheader("📋 Patient Summary")
+
+st.info(f"""
+Age: {Age}
+
+BMI: {BMI}
+
+BMI Category: {bmi_status}
+
+Glucose: {Glucose}
+
+Blood Pressure: {BloodPressure}
+
+Prediction Confidence: {confidence:.2f}%
+""")
+import plotly.express as px
+import pandas as pd
+chart_data = pd.DataFrame({
+    "Parameter": [
+        "Glucose",
+        "Blood Pressure",
+        "BMI",
+        "Age"
+    ],
+    "Value": [
+        Glucose,
+        BloodPressure,
+        BMI,
+        Age
+    ]
+})
+
+fig = px.bar(
+    chart_data,
+    x="Parameter",
+    y="Value",
+    title="Patient Health Parameters"
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
 
     # Confidence Score
     try:
